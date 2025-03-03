@@ -11,9 +11,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-     if: |
-          github.event_name == 'pull_request' &&
-          (github.base_ref == 'main' || github.base_ref == 'develop')
+    if: |
+      github.event_name == 'pull_request' &&
+      (github.event.pull_request.base.ref == 'main' || github.event.pull_request.base.ref == 'develop')
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
