@@ -1,4 +1,5 @@
-import {WorkflowBuilder, WorkflowStep} from "./index.ts";
+import {WorkflowStep} from "./core/types.js";
+import {WorkflowBuilder} from "./core/workflow-builder.js";
 
 const createUserStep: WorkflowStep<{ name: string }, { id: string }> = {
     async execute(input) {
@@ -14,7 +15,7 @@ const createUserStep: WorkflowStep<{ name: string }, { id: string }> = {
 };
 
 const createProfileStep: WorkflowStep<any, { profileId: string }> = {
-    async execute(_, context) { // Ignore direct input, use context
+    async execute(_, context,container) { // Ignore direct input, use context
         console.log("createProfileStep", createProfileStep)
         // Get user ID from previous step's context
         const userId = context.user.id;

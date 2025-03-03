@@ -1,25 +1,5 @@
-import {asFunction, AwilixContainer, createContainer} from "awilix";
-
-export interface WorkflowContext {
-    [key: string]: any;
-}
-
-export interface WorkflowStep<TInput = any, TOutput = any> {
-    execute: (
-        input: TInput,
-        context: WorkflowContext,
-        container: AwilixContainer
-    ) => Promise<TOutput>;
-    compensate?: (
-        output: TOutput,
-        context: WorkflowContext,
-        container: AwilixContainer
-    ) => Promise<void>;
-}
-
-type StepGroup =
-    | { type: "sequential"; key: string; step: WorkflowStep }
-    | { type: "parallel"; steps: Array<{ key: string; step: WorkflowStep }> };
+import {AwilixContainer, createContainer} from "awilix";
+import {StepGroup, WorkflowContext, WorkflowStep} from "./types.ts";
 
 export class WorkflowBuilder<TInput = any, TOutput = any> {
     private stepGroups: StepGroup[] = [];
@@ -167,5 +147,3 @@ export class WorkflowBuilder<TInput = any, TOutput = any> {
         return this.context[lastGroup.key];
     }
 }
-
-
