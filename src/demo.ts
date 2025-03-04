@@ -25,7 +25,6 @@ const createProfileStep: WorkflowStep<any, { profileId: string }> = {
         // Create profile logic
         const profile = {profileId: `profile-${userId}`};
         context.profile = profile; // Optional: Store in context if needed
-        throw new Error("FAIIILLED")
         return {
             profileId: "s"
         };
