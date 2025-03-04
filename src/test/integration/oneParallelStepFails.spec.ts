@@ -1,5 +1,4 @@
-import {WorkflowStep} from "../../core/types.ts";
-import {WorkflowBuilder} from "../../core/workflow-builder.ts";
+import {WorkflowBuilder, WorkflowStep} from "../../core/workflow-builder.ts";
 import {MockLogger} from "../common/mock-logger.ts";
 import {asFunction, createContainer} from "awilix";
 
