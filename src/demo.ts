@@ -26,7 +26,7 @@ const createProfileStep: WorkflowStep<any, { profileId: string }> = {
         const profile = {profileId: `profile-${userId}`};
         context.profile = profile; // Optional: Store in context if needed
         return {
-            profileId: "s"
+            profileId: "foo"
         };
     },
     async compensate(output) {
