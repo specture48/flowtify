@@ -1,4 +1,4 @@
-import {AwilixContainer} from "awilix";
+import { AwilixContainer } from "awilix";
 
 export interface WorkflowContext {
     [key: string]: any;
@@ -18,5 +18,17 @@ export interface WorkflowStep<TInput = any, TOutput = any> {
 }
 
 export type StepGroup =
-    | { type: "sequential"; key: string; step: WorkflowStep }
-    | { type: "parallel"; steps: Array<{ key: string; step: WorkflowStep }> };
+    | {
+    type: "sequential";
+    key: string;
+    step: WorkflowStep;
+    inputResolver?: (context: WorkflowContext) => any;
+}
+    | {
+    type: "parallel";
+    steps: Array<{
+        key: string;
+        step: WorkflowStep;
+        inputResolver?: (context: WorkflowContext) => any;
+    }>;
+};
