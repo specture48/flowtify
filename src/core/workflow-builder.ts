@@ -154,7 +154,6 @@ export class WorkflowBuilder<TInput = any, TOutput = any> {
                 await step.compensate(output, this.context, this.container);
             }
         } else {
-
             await Promise.all(
                 group.steps.map(async ({output, step}) => {
                     if (step.compensate) {

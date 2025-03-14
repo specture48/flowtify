@@ -1,4 +1,5 @@
 import {WorkflowBuilder} from "../../core/workflow-builder.ts";
+import {asValue, createContainer} from "awilix";
 
 describe("WorkflowBuilder", () => {
     let container: any;
@@ -110,5 +111,40 @@ describe("WorkflowBuilder", () => {
         const result = await workflow.execute(1);
         expect(result).toEqual({step1: 2, nestedWorkflow: 2}); // { step1: 1 + 1, nestedWorkflow: 1 + 1 }
     });
-    //TODO test if container is being passed to the nested workflows
+
+    it("should pass container to nested workflows", async () => {
+        // Assuming a Container class exists with these methods
+        const container = createContainer();
+        container.register({
+            someService: asValue("someService")
+        });
+
+        // Create child workflow
+        const childWorkflow = new WorkflowBuilder<number, number>(container)
+            .addStep("childStep1", {
+                execute: (input: any, context: any, container: any) => {
+                    const serviceResponse = container.resolve("someService");
+                    console.log("Service Response:", serviceResponse);
+                    return input + 1;
+                },
+            });
+
+        // Create parent workflow with nested workflow
+        const parentWorkflow = new WorkflowBuilder<number, number>(container)
+            .addStep("nestedWorkflow", childWorkflow.runAsStep("nestedWorkflow"));
+
+        // First execution - check basic functionality
+        const result = await parentWorkflow.execute(1);
+        expect(result).toBe(2); // 1 + 1 = 2
+
+        // Setup mock before second execution
+        const mockResolve = jest.spyOn(container, 'resolve');
+
+        // Second execution - verify container usage
+        await parentWorkflow.execute(1);
+        expect(mockResolve).toHaveBeenCalledWith("someService");
+
+        // Cleanup
+        mockResolve.mockRestore();
+    });
 });
