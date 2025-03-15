@@ -1,5 +1,5 @@
-import {WorkflowStep} from "../../core/types.ts";
-import {WorkflowBuilder} from "../../core/workflow-builder.ts";
+import {WorkflowStep} from "../../core/types";
+import {WorkflowBuilder} from "../../core/workflow-builder";
 
 describe("WorkflowBuilder with inputResolver", () => {
     let container: any;

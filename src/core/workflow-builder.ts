@@ -1,5 +1,5 @@
 import {AwilixContainer, createContainer} from "awilix";
-import {StepGroup, WorkflowContext, WorkflowStep} from "./types.ts";
+import {StepGroup, WorkflowContext, WorkflowStep} from "./types";
 
 export class WorkflowBuilder<TInput = any, TOutput = any> {
     private stepGroups: StepGroup[] = [];

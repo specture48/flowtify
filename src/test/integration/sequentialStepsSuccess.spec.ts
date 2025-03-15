@@ -1,8 +1,8 @@
 import {asFunction, createContainer} from "awilix";
 
-import {MockLogger} from "../common/mock-logger.ts";
-import {WorkflowStep} from "../../core/types.ts";
-import {WorkflowBuilder} from "../../core/workflow-builder.ts";
+import {MockLogger} from "../common/mock-logger";
+import {WorkflowStep} from "../../core";
+import {WorkflowBuilder} from "../../core";
 
 describe('WorkflowBuilder', () => {
     test('All sequential steps succeed', async () => {

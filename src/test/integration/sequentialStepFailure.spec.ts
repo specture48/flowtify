@@ -1,7 +1,7 @@
 import {asFunction, createContainer} from "awilix";
-import {MockLogger} from "../common/mock-logger.ts";
-import {WorkflowStep} from "../../core/types.ts";
-import {WorkflowBuilder} from "../../core/workflow-builder.ts";
+import {MockLogger} from "../common/mock-logger";
+import {WorkflowStep} from "../../core/types";
+import {WorkflowBuilder} from "../../core/workflow-builder";
 
 test('A sequential step fails', async () => {
     const container = createContainer();

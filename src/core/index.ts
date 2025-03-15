@@ -1,2 +1,2 @@
-export * from './types.ts'
-export * from './workflow-builder.ts'
+export * from './types'
+export * from './workflow-builder'

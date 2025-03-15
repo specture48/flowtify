@@ -1,4 +1,4 @@
-import {WorkflowBuilder} from "../../core/workflow-builder.ts";
+import {WorkflowBuilder} from "../../core/workflow-builder";
 import {asValue, createContainer} from "awilix";
 
 describe("WorkflowBuilder", () => {

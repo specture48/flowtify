@@ -1,6 +1,6 @@
-import {WorkflowStep} from "../../core/types.ts";
-import {WorkflowBuilder} from "../../core/workflow-builder.ts";
-import {MockLogger} from "../common/mock-logger.ts";
+import {WorkflowStep} from "../../core/types";
+import {WorkflowBuilder} from "../../core/workflow-builder";
+import {MockLogger} from "../common/mock-logger";
 import {asFunction, createContainer} from "awilix";
 
 test('One parallel step fails', async () => {
