@@ -1,6 +1,6 @@
 {
   "name": "flowtify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -24,5 +24,10 @@
   "dependencies": {
     "awilix": "^12.0.4",
     "ulid": "^2.3.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
   }
 }
