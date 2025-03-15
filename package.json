@@ -1,16 +1,17 @@
 {
   "name": "flowtify",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "dev": "ts-node --esm --experimental-specifier-resolution=node src/demo.ts",
+    "dev": "node --loader ts-node/esm src/demo.ts",
     "clean": "rm -rf dist",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
+    "test:watch": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --watch",
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --coverage"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -23,5 +24,12 @@
   "dependencies": {
     "awilix": "^12.0.4",
     "ulid": "^2.3.0"
+  },
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
   }
 }
