@@ -177,5 +177,3 @@ If you encounter any issues or have questions, please [open an issue](https://gi
 - Inspired by workflow patterns in distributed systems and event-driven architectures.
 
 ---
-
-This `README.md` provides a comprehensive overview of `flowtify`, including installation instructions, usage examples, API reference, and contribution guidelines. Let me know if you’d like to add or modify anything!
