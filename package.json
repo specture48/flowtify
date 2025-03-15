@@ -24,12 +24,5 @@
   "dependencies": {
     "awilix": "^12.0.4",
     "ulid": "^2.3.0"
-  },
-  "files": ["dist"],
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
-    }
   }
 }

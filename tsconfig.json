@@ -1,28 +1,20 @@
 {
-  "include": [
-    "./src/**/*",
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "outDir": "dist", // Output folder
+    "outDir": "dist",
     "rootDir": "src",
-    "paths": {},
     "target": "ES2020",
     "module": "ES2022",
-    "moduleResolution": "node" ,// Use 'node' instead of 'node16' or 'nodenext',
+    "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    /* Allow imports to include TypeScript file extensions. Requires '--moduleResolution bundler' and either '--noEmit' or '--emitDeclarationOnly' to be set. */
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    /* Type Checking */
     "strict": true,
     "noImplicitAny": true,
-    /* Enable error reporting for expressions and declarations with an implied 'any' type. */
     "strictPropertyInitialization": false,
     "skipLibCheck": true,
-    "types": [
-      "jest"
-    ]
+    "declaration": true,
+    "types": ["jest"]
   }
 }
