@@ -1,7 +1,6 @@
 {
   "name": "flowtify",
   "version": "1.0.12",
-  "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
