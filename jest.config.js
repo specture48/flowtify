@@ -1,9 +1,7 @@
 // jest.config.js
-export default {
+
+module.exports = {
     preset: "ts-jest",
     testEnvironment: "node",
     testMatch: ["**/test/**/*.spec.ts"],
-    collectCoverage: true,
-    coverageDirectory: "coverage",
-    coverageReporters: ["text", "lcov"],
-};
+  };
