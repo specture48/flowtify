@@ -1,12 +1,7 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "outDir": "./dist/cjs",
-    "rootDir": "./src",
-    "declaration": false, // Types are already generated in ESM build
-    "esModuleInterop": true,
-    "strict": true
-  },
-  "include": ["src/**/*"]
+    "module": "CommonJS", // Use CommonJS
+    "outDir": "dist/cjs" // Output folder for CommonJS
+  }
 }
