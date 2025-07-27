@@ -2146,9 +2146,11 @@ __metadata:
     "@types/node": ^18.0.0
     awilix: ^12.0.4
     jest: ^29.7.0
+    reflect-metadata: ^0.2.2
     ts-jest: ^29.2.6
     ts-node: ^10.0.0
     tsup: ^8.4.0
+    typedi: ^0.10.0
     typescript: ^5.0.0
     ulid: ^2.3.0
   languageName: unknown
@@ -3702,6 +3704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"reflect-metadata@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "reflect-metadata@npm:0.2.2"
+  checksum: a66c7b583e4efdd8f3c3124fbff33da2d0c86d8280617516308b32b2159af7a3698c961db3246387f56f6316b1d33a608f39bb2b49d813316dfc58f6d3bf3210
+  languageName: node
+  linkType: hard
+
 "require-directory@npm:^2.1.1":
   version: 2.1.1
   resolution: "require-directory@npm:2.1.1"
@@ -4368,6 +4377,13 @@ __metadata:
   version: 0.21.3
   resolution: "type-fest@npm:0.21.3"
   checksum: e6b32a3b3877f04339bae01c193b273c62ba7bfc9e325b8703c4ee1b32dc8fe4ef5dfa54bf78265e069f7667d058e360ae0f37be5af9f153b22382cd55a9afe0
+  languageName: node
+  linkType: hard
+
+"typedi@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "typedi@npm:0.10.0"
+  checksum: d26491e3684677d898f745b2ea5403cad4e03f7ed87b35d0a1cc80cbb4837d50042e100574da77d56dd04e3f0270a6f7df18270171c828bec6b93cefbac059a3
   languageName: node
   linkType: hard
 

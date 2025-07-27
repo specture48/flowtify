@@ -1,67 +1,99 @@
-import {WorkflowStep} from "./core/types.js";
-import {WorkflowBuilder} from "./core/workflow-builder.js";
+import { createContainer, asFunction } from 'awilix';
+import {
+  createStep,
+  createWorkflow,
+  StepResponse,
+  WorkflowResponse,
+  awilixAdapter
+} from './';
 
-const createUserStep: WorkflowStep<{ name: string }, { id: string }> = {
-    async execute(input) {
-        console.log("createUserStep", createUserStep)
-
-        return Promise.resolve({
-            id: "foo"
-        })
-    },
-    async compensate(output) { /* ... */
-        console.log("compensate createUserStep")
-    }
-};
-
-const createProfileStep: WorkflowStep<any, { profileId: string }> = {
-    async execute(_, context,container) { // Ignore direct input, use context
-        console.log("createProfileStep", createProfileStep)
-        // Get user ID from previous step's context
-        const userId = context.user.id;
-        console.log("context", context)
-        console.log(`Creating profile for user ${userId}`);
-
-        // Create profile logic
-        const profile = {profileId: `profile-${userId}`};
-        context.profile = profile; // Optional: Store in context if needed
-        return {
-            profileId: "foo"
-        };
-    },
-    async compensate(output) {
-        console.log(`Deleting profile ${output.profileId}`);
-    }
-};
-
-const createSubscriptionStep: WorkflowStep<string, { subId: string }> = {
-    async execute(userId) {
-        console.log("createSubscriptionStep", createSubscriptionStep)
-
-        return Promise.resolve({
-            subId: "foo"
-        })
-    },
-    async compensate(output) {
-        console.log("compensate createSubscriptionStep")
-    }
-};
-
-// Create workflow
-const workflow = new WorkflowBuilder()
-    .addStep("user", createUserStep)
-    .addParallel({
-        subscription: createSubscriptionStep,
-        profile: createProfileStep,
+// Setup container with services
+const awilixContainer = createContainer();
+awilixContainer.register({
+  userService: asFunction(() => ({
+    createUser: async (input: any) => ({
+      id: `user-${Date.now()}`,
+      name: input.name,
+      created_at: new Date()
     })
-// .addStep("notification", sendNotificationStep);
+  })).singleton(),
+  profileService: asFunction(() => ({
+    createProfile: async (userId: string) => ({
+      profileId: `profile-${userId}`,
+      userId,
+      created_at: new Date()
+    })
+  })).singleton(),
+  subscriptionService: asFunction(() => ({
+    createSubscription: async (userId: string) => ({
+      subId: `sub-${userId}`,
+      userId,
+      plan: 'basic',
+      created_at: new Date()
+    })
+  })).singleton()
+});
+
+const container = awilixAdapter.from(awilixContainer);
+
+// Define workflow steps using Medusa pattern
+const createUserStep = createStep(
+  'create-user',
+  async (input: { name: string }, { container }) => {
+    const userService = container.resolve('userService');
+    const user = await userService.createUser(input);
+    console.log('User created:', user);
+    return new StepResponse(user);
+  }
+);
+
+const createProfileStep = createStep(
+  'create-profile',
+  async (input: { user: any }, { container }) => {
+    const profileService = container.resolve('profileService');
+    const profile = await profileService.createProfile(input.user.id);
+    console.log('Profile created:', profile);
+    return new StepResponse(profile);
+  }
+);
+
+const createSubscriptionStep = createStep(
+  'create-subscription',
+  async (input: { user: any }, { container }) => {
+    const subscriptionService = container.resolve('subscriptionService');
+    const subscription = await subscriptionService.createSubscription(input.user.id);
+    console.log('Subscription created:', subscription);
+    return new StepResponse(subscription);
+  }
+);
+
+// Define the workflow using Medusa pattern
+export const userOnboardingWorkflow = createWorkflow(
+  'user-onboarding',
+  function(input: { name: string }) {
+    const user = createUserStep(input);
+    const profile = createProfileStep({ user });
+    const subscription = createSubscriptionStep({ user });
+    
+    return new WorkflowResponse({
+      user,
+      profile,
+      subscription
+    });
+  }
+);
 
 // Execute workflow
-workflow.execute({name: "John"})
-    .then(result => {
-        console.log("User created with profile and subscription:", result);
-    })
-    .catch(error => {
-        console.error("Workflow failed:", error);
+async function runDemo() {
+  try {
+    const { result } = await userOnboardingWorkflow(container).run({
+      input: { name: "John Doe" }
     });
+    
+    console.log("User onboarding completed successfully:", result);
+  } catch (error) {
+    console.error("Workflow failed:", error);
+  }
+}
 
+runDemo();
