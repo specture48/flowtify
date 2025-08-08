@@ -128,3 +128,32 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Temporary documentation files
+TODO.md
+TEST_RESULTS_SUMMARY.md
+TEST_ORGANIZATION_SUMMARY.md
+EXACT_MEDUSA_PATTERN.md
+STEP_WORKFLOW_LINKING_EXPLAINED.md
+OLD_SYSTEM_REMOVAL_SUMMARY.md
+MEDUSA_API_SUMMARY.md
+CONTAINER_ABSTRACTION_SUMMARY.md
+CLEANUP_SUMMARY.md
+*_SUMMARY.md
+*_FIXES.md
+
+# Demo and temporary files
+demo-*.ts
+demo-*.js
+*.backup
+*.tmp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
