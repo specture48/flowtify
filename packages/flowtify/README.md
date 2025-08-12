@@ -1,6 +1,6 @@
 # Flowtify
 
-A flexible workflow orchestration library with TypeScript support, featuring powerful compensation patterns, step management, and container-based dependency injection.
+A flexible workflow orchestration library with TypeScript support, featuring powerful compensation patterns, step management, and container-based dependency injection. Highly inspired by the workflow SDK from MedusaJS.
 
 ## Features
 
@@ -111,15 +111,15 @@ Steps are the building blocks of workflows. They can:
 
 ```typescript
 const step = createStep('stepName', 
-  async (input, context) => {
+  async (input, { container }) => {
     // Invoke function - main business logic
-    const service = context.container.resolve('myService');
+    const service = container.resolve('myService');
     const result = await service.process(input);
     return new StepResponse(result);
   },
-  async (compensateInput, context) => {
+  async (compensateInput, { container }) => {
     // Compensate function - rollback logic
-    const service = context.container.resolve('myService');
+    const service = container.resolve('myService');
     await service.rollback(compensateInput);
   }
 );
@@ -262,19 +262,22 @@ Here's a complete example showing payment compensation in an e-commerce workflow
 ```typescript
 // Complete e-commerce order workflow with payment compensation
 const reserveInventoryStep = createStep('reserveInventory', 
-  async (input: { productId: string; quantity: number }) => {
+  async (input: { productId: string; quantity: number }, { container }) => {
+    const inventoryService = container.resolve('inventoryService');
     const reservation = await inventoryService.reserve(input.productId, input.quantity);
     return new StepResponse(reservation, { reservationId: reservation.id });
   },
-  async (compensateInput: { reservationId: string }) => {
+  async (compensateInput: { reservationId: string }, { container }) => {
     // Compensation: release inventory reservation
+    const inventoryService = container.resolve('inventoryService');
     await inventoryService.release(compensateInput.reservationId);
     console.log(`Released inventory reservation ${compensateInput.reservationId}`);
   }
 );
 
 const processPaymentStep = createStep('processPayment', 
-  async (order: { total: number; customerId: string }) => {
+  async (order: { total: number; customerId: string }, { container }) => {
+    const paymentService = container.resolve('paymentService');
     const payment = await paymentService.charge({
       amount: order.total,
       customerId: order.customerId,
@@ -291,9 +294,10 @@ const processPaymentStep = createStep('processPayment',
       customerId: payment.customerId
     });
   },
-  async (compensateInput: { paymentId: string; amount: number; customerId: string }) => {
+  async (compensateInput: { paymentId: string; amount: number; customerId: string }, { container }) => {
     // Compensation: refund the payment
     try {
+      const paymentService = container.resolve('paymentService');
       const refund = await paymentService.refund(compensateInput.paymentId, {
         amount: compensateInput.amount,
         reason: 'Order processing failed'
@@ -302,6 +306,7 @@ const processPaymentStep = createStep('processPayment',
       console.log(`Refunded $${compensateInput.amount} to customer ${compensateInput.customerId}`);
       
       // Optionally notify customer
+      const notificationService = container.resolve('notificationService');
       await notificationService.sendRefundNotification(compensateInput.customerId, refund);
     } catch (error) {
       // Log but don't throw - compensation errors are handled gracefully
@@ -311,20 +316,23 @@ const processPaymentStep = createStep('processPayment',
 );
 
 const createShippingLabelStep = createStep('createShippingLabel',
-  async (order: { address: any; items: any[] }) => {
+  async (order: { address: any; items: any[] }, { container }) => {
+    const shippingService = container.resolve('shippingService');
     const label = await shippingService.createLabel(order.address, order.items);
     return new StepResponse(label, { labelId: label.id });
   },
-  async (compensateInput: { labelId: string }) => {
+  async (compensateInput: { labelId: string }, { container }) => {
     // Compensation: cancel shipping label
+    const shippingService = container.resolve('shippingService');
     await shippingService.cancelLabel(compensateInput.labelId);
     console.log(`Cancelled shipping label ${compensateInput.labelId}`);
   }
 );
 
 const fulfillOrderStep = createStep('fulfillOrder',
-  async (input: { orderId: string; shippingLabel: any }) => {
+  async (input: { orderId: string; shippingLabel: any }, { container }) => {
     // This step might fail, triggering compensation for all previous steps
+    const fulfillmentService = container.resolve('fulfillmentService');
     const fulfillment = await fulfillmentService.processOrder(input.orderId, input.shippingLabel);
     
     if (fulfillment.status === 'failed') {
@@ -375,6 +383,14 @@ const ecommerceOrderWorkflow = createWorkflow('ecommerceOrder', (input: {
   });
 });
 
+// Setup container with services
+const container = awilixAdapter.create();
+container.register('inventoryService', new InventoryService());
+container.register('paymentService', new PaymentService());
+container.register('shippingService', new ShippingService());
+container.register('fulfillmentService', new FulfillmentService());
+container.register('notificationService', new NotificationService());
+
 // Usage with error handling
 try {
   const runner = ecommerceOrderWorkflow();
@@ -386,7 +402,7 @@ try {
       total: 99.99,
       address: { street: '123 Main St', city: 'Anytown' }
     },
-    container: undefined
+    container
   });
   
   console.log('Order processed successfully:', result.result);
