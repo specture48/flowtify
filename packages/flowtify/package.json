@@ -1,6 +1,6 @@
 {
   "name": "flowtify",
-  "version": "1.0.14",
+  "version": "1.0.16",
   "description": "A flexible workflow orchestration library with TypeScript support",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -8,10 +8,16 @@
   "files": [
     "dist"
   ],
-  "keywords": ["workflow", "orchestration", "typescript", "saga", "compensation"],
+  "keywords": [
+    "workflow",
+    "orchestration",
+    "typescript",
+    "saga",
+    "compensation"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-org/flowtify.git"
+    "url": "https://github.com/specture48/flowtify.git"
   },
   "license": "MIT",
   "scripts": {
@@ -20,7 +26,11 @@
     "clean": "rm -rf dist",
     "test": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest",
     "test:watch": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --watch",
-    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --coverage"
+    "test:coverage": "NODE_OPTIONS='--experimental-vm-modules --no-warnings' jest --coverage",
+    "prepublishOnly": "yarn clean && yarn build && yarn test"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
